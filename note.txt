@@ -1,0 +1,66 @@
+環境安裝
+=============
+anaconda promt安裝失敗時且無法開啟anaconda navigator時且連線出現SSL失敗時=>安裝OpenSSL
+https://stackoverflow.com/questions/54612022/unable-to-use-conda-with-anaconda-2018-2-on-windows
+==============
+用conda建立及管理python虛擬環境
+conda create --name testAI python=3.7
+https://medium.com/python4u/%E7%94%A8conda%E5%BB%BA%E7%AB%8B%E5%8F%8A%E7%AE%A1%E7%90%86python%E8%99%9B%E6%93%AC%E7%92%B0%E5%A2%83-b61fd2a76566
+http://tensorflowkeras.blogspot.com/2017/08/tensorflowkeraswindows_29.html
+==============
+安裝到指定路徑
+conda create --prefix=D:\Anaconda3\testAI python=3.7
+==============
+安裝一般的package
+pip install sklearn
+pip install numpy
+pip install seaborn
+pip install keras
+pip install tensorflow
+pip install xgboost
+pip install plotly
+==============
+安裝Django網站相關api並開啟網站
+pip install Django
+pip install djangorestframework
+pip install requests
+python manage.py runserver
+==============
+分析資料流程
+1.拿到資料的第一步，通常就是看我們有什麼，觀察有什麼欄位，這些欄位代表什麼意義、以什麼樣的資料類型來儲存。
+2.資料原來來是字串/類別的話，如果要做進⼀步的分析時（如訓練模型），⼀般需要轉為數值的資料類型，轉換的方式通常有兩種
+	• Label encoding：使用時機通常是該資料的不同類別是有序的，例如該資料是年齡分組，類別有小孩、年年輕人、老人，表示為 0, 1, 2
+			   是合理的，因為年齡上老人 > 年輕人、年輕人 > 小孩
+	• One Hot encoding：使⽤用時機通常是該資料的不同類別是無序的，例如國家
+EDA
+「探索式資料分析」(Exploratory Data Analysis)
+ 初步透過視覺化/統計0工具進行分析，達到三個主要目的
+	了解資料
+	• 獲取資料所包含的資訊、結構和特點
+	發現 outliers 或異異常數值
+	• 檢查資料是否有誤
+	分析各變數間的關聯性
+	• 找出重要的變數
+從 EDA 的過程中觀察現象，檢查資料是否符合分析前的假設
+	• 可以在模型建立之前，先發現潛在的錯誤
+	• 也可以根據 EDA 的結果來來調整分析的⽅方向
+
+==============
+adult 分析資料
+https://medium.com/@bt2011aa/以weka對資料集進行關聯式規則之實作-e7a87c2005a9
+=============
+貸款違約風險預測
+https://medium.com/@skywalker0803r/%E8%B3%87%E6%96%99%E7%A7%91%E5%AD%B8%E5%85%A5%E9%96%80-%E8%B2%B8%E6%AC%BE%E9%81%95%E7%B4%84%E9%A2%A8%E9%9A%AA%E9%A0%90%E6%B8%AC-ee4b08a0626
+Home Credit Default Risk Competition
+=========================
+混淆矩陣:Accuracy,Precision,Recall,F1-Measure
+決策樹:criterion,max_depth,min_samples_split,min_samples_leaf
+隨機森林
+xgb
+參數調整
+grid_search
+流程:
+
+
+
+

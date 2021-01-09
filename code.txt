@@ -1,0 +1,137 @@
+參考網址grid_seach用法
+https://www.kaggle.com/laiyanting/compare-ml-with-grid-to-simple-mlp
+================================================================================
+import pandas as pd
+import numpy as np
+import os
+import seaborn as sns
+import matplotlib.pyplot as plt
+import xgboost as xgb
+from sklearn.model_selection import GridSearchCV
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score,make_scorer
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import classification_report
+====================================================================================
+def grid_search(clf, parameters, X_train, y_train):
+    acc_scorer = make_scorer(accuracy_score)
+    grid_obj = GridSearchCV(clf, parameters, scoring=acc_scorer, n_jobs=-1, cv=5)
+    grid_obj = grid_obj.fit(X_train, y_train.values.ravel())
+    clf = grid_obj.best_estimator_
+    return(clf)
+    
+    
+def classifier(clf):
+    
+    clf_name = clf.__class__.__name__
+    parameters = parameter_set(clf_name)
+    print(parameters)
+    # return predictions from gird search best model
+    clf = grid_search(clf, parameters, x_train, y_train)
+    
+    # fit best model
+    clf.fit(x_train, y_train.values.ravel())
+    
+    predictions = clf.predict(x_test) 
+    if clf_name == 'XGBClassifier':
+        predictions = [value for value in predictions]
+    return(predictions)
+
+def parameter_set(clf_name):
+    if clf_name == 'RandomForestClassifier':
+        parameters = {'n_estimators': [5, 10, 50, 100, 150, 200], 
+              'max_features': ['log2', 'sqrt','auto'], 
+              'criterion': ['entropy', 'gini'],
+#               'max_depth': list(range(2,10)), 
+#               'min_samples_split': list(range(2,5)),
+#               'min_samples_leaf': list(range(1,5)),
+              'verbose': [0]
+             }
+    if clf_name == 'DecisionTreeClassifier':
+        parameters = {
+              'max_depth': list(range(2,10)), 
+              'min_samples_split': list(range(2,10))
+             }
+    if clf_name == 'AdaBoostClassifier':
+        parameters = {
+            "n_estimators" : [5, 10, 50, 100, 150, 200],
+            "algorithm" :  ["SAMME", "SAMME.R"],
+            'learning_rate':[0.01, 0.025, 0.05, 0.075, 0.1, 0.15, 0.2, 0.3, 0.5, 0.7]
+             }
+    if clf_name == 'GradientBoostingClassifier':
+        parameters = {
+            "loss":["deviance"],
+            "learning_rate": [0.075, 0.1, 0.15, 0.2, 0.3, 0.5, 0.7],
+#             "min_samples_split": list(range(2,5)),
+#             "min_samples_leaf": list(range(1,5)),
+            "max_depth": [3,5,8],
+            "max_features": ["log2","sqrt"],
+            "criterion": ["friedman_mse",  "mae"],
+            "subsample": [0.5, 0.8, 0.9, 1.0],
+            "n_estimators": [5, 10, 50, 100, 150, 200]
+             }
+    if clf_name == 'XGBClassifier':
+        parameters = {
+            'learning_rate': np.linspace(0.01, 0.5, 9),
+#             'max_depth': list(range(5,10)),
+#             'min_child_weight': list(range(3,10)),
+            'gamma': np.linspace(0, 0.5, 11),
+#             'subsample': [0.8, 0.9],
+#             'colsample_bytree': [0.3, 0.4, 0.5 , 0.7, 0.8, 0.9],
+            'objective': ['binary:logistic']
+        }
+    return(parameters)
+=====================================================================================
+#設定路徑
+dir_data = './data/' 
+train_data = os.path.join(dir_data,'heart.data.csv')
+test_data = os.path.join(dir_data,'heart.test.csv')
+x_train = pd.read_csv(train_data)
+x_test = pd.read_csv(test_data)
+x_train.head()
+x_test.head()
+=================================================================================
+#設置column
+col_label = ['age','workclass','fnlwgt','education','education-num','marital-status','occupation','relationshiprace','race','sex','capital-gain','capital-loss','hours-per-week','native-country','wage_class']
+x_train.columns = col_label
+x_test.columns = col_label
+x_train.info()
+x_test.info()
+=================================================================
+#缺失值處理:先替換掉?在dropna
+print( x_train.shape) 
+print( x_test.shape)
+x_train=x_train.replace(' ?', np.nan).dropna()
+x_test=x_test.replace(' ?', np.nan).dropna()
+print( x_train.shape) 
+print( x_test.shape)
+=================================================================
+#查看列屬性和類別的關係
+#我們可以查看下，教育程度和類別(年收入>=50Kde 關係，一般來說學歷越高，年收入高的概率越大)
+print( x_train.education.unique())
+print(pd.crosstab(x_train['wage_class'], x_train['education'], rownames=['wage_class']))
+#我們可以看到Masters(研究生)的>=50K的比例較高，而Preschool沒有上個學的基本沒有>=50K的。
+================================================================
+#字符串類型轉化爲數值類型,爲了保證測試集和訓練集的encoding類型一致，我們首先將兩個表join，編碼完成之後，在分開到原始的表中:
+
+combined_set = pd.concat([x_train, x_test], axis=0)
+#合併完成將表中的object數據轉化爲int類型：
+
+for feature in combined_set.columns:
+    if combined_set[feature].dtype == 'object':
+        combined_set[feature] = pd.Categorical(combined_set[feature]).codes
+===================================================================
+#將數據轉到原有的訓練集以及測試集中:
+
+x_train = combined_set[:x_train.shape[0]]
+x_test = combined_set[x_train.shape[0]:]
+#我們可以看下，education以及wage_class的編碼:
+
+print (x_train.education.unique())
+print (x_train.wage_class.unique())
+======================================================
+y_train=x_train.pop('wage_class')
+y_test=test_set.pop('wage_class')
+==============================================
+
