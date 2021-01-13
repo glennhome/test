@@ -1,0 +1,35 @@
+20210113 上機前準備
+sklearn資料前處理:
+1.Rescale data
+#Rescale data (between 0  and 1 )
+import pandas
+from sklearn.preprocessing import MinMaxScaler 
+
+20210111
+adult_dataset有做資料處理
+D:\Anaconda3\megatest\adult\demo.ipython
+
+adult_dateset最完整的分析(資料處理、數據分析、建模、調參)
+D:\Anaconda3\megatest\adult\數據分析展示.html
+
+
+Heart_dataset只有建模流程
+D:\life/exam/考試/兆豐/大數據1080803/軟體/taiwanlife/taiwanlife/Heart Disease Classification.ipynb
+
+此ipyhthon只有含HeartGrid search調參
+https://www.kaggle.com/laiyanting/compare-ml-with-grid-to-simple-mlp
+
+
+
+
+Adult資料集 要知道怎樣整理到可以都進模型用
+想想這資料集要做哪些處理
+然後再去學怎樣建模 調參數
+Heart裡面沒有資料整理喔
+Heart是建模流程
+不過少了調參數
+Grid search是調參的方式
+Heart那做法 用法是把資料清理到一個程度 丟給這個檔案跑 直接產出結果
+適合各種資料集
+原來數據分析展示那個html有把heart那邊的程式包進去
+去Kaggle看看鐵達尼跟房價預測兩種類別,看他們怎樣整資料 用sklearn的分類器
