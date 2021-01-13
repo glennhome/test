@@ -1,9 +1,20 @@
 20210113 上機前準備
 sklearn資料前處理:
-1.Rescale data
 #Rescale data (between 0  and 1 )
 import pandas
+import numpy
 from sklearn.preprocessing import MinMaxScaler 
+url="https://raw.githubusercontent.com/jbrownlee/Datasets/master/pima-indians-diabetes.data.csv"
+names= ['preg', 'plas', 'pres', 'skin', 'test', 'mass', 'pedi', 'age', 'class']
+dataframe = pandas.read_csv(url,names=names)
+array=dataframe.values
+scaler=MinMaxScaler(feature_range=(0,1))
+rescaleX = scaler.fit_transform(array)
+numpy.set_printoptions(threshold=numpy.inf)# 解決不完全顯示問題 
+print(rescaleX)#列顯示的預設極限值為111
+# 解決輸出非零元問題 
+nonzero = numpy.nonzero(rescaleX) 
+print(rescaleX[nonzero]) 
 
 20210111
 adult_dataset有做資料處理
