@@ -1,5 +1,6 @@
 20210113 上機前準備
 sklearn資料前處理:
+#將資料比例縮放到0與1之間
 #Rescale data (between 0  and 1 )
 import pandas
 import numpy
@@ -15,6 +16,48 @@ print(rescaleX)#列顯示的預設極限值為111
 # 解決輸出非零元問題 
 nonzero = numpy.nonzero(rescaleX) 
 print(rescaleX[nonzero]) 
+#將資料常態分布化，平均值會變為0，標準差變為1，使離群值影響降低
+#StandardScaler 
+#MinMaxScaler與StandardScaler類似
+import numpy
+import pandas
+from sklearn.preprocessing import StandardScaler 
+utl="https://raw.githubusercontent.com/jbrownlee/Datasets/master/pima-indians-diabetes.data.csv"
+names= ['preg', 'plas', 'pres', 'skin', 'test', 'mass', 'pedi', 'age', 'class']
+dataframe = pandas.read_csv(url,names=names)
+array=dataframe.values
+scaler = StandardScaler()
+rescale = scaler.fit_transform(array)
+numpy.set_printoptions(threshold=numpy.inf)#解決不完全顯示的問題
+print(rescale)
+#最大值變為1，最小值變為0
+#Normallizer Data
+import pandas
+import numpy
+from sklearn.preprocessing import Normalizer
+url = "https://raw.githubusercontent.com/jbrownlee/Datasets/master/pima-indians-diabetes.data.csv"
+names = ['preg', 'plas', 'pres', 'skin', 'test', 'mass', 'pedi', 'age', 'class']
+dataframe =  pandas.read_csv(url,names=names)
+array = dataframe.values
+scaler = Normalizer()
+rescale = scaler.fit_transform(array)
+numpy.set_printoptions(threshold=numpy.inf)
+print(rescale)
+rescale.tofile('foo.csv',sep=',',format='%10.5f') #沒換行,%10.5f代表向左補齊或取10位元,向右補齊或取5位元,f為浮點數
+numpy.savetxt('rescale.csv',rescale,delimiter=',',fmt='%10.5f') #有換行
+#資料二元化(0或1)
+#Binarize Data
+import pandas as pd
+import numpy as np
+from sklearn.preprocessing import Binarizer
+url = "https://raw.githubusercontent.com/jbrownlee/Datasets/master/pima-indians-diabetes.data.csv"
+names = ['preg', 'plas', 'pres', 'skin', 'test', 'mass', 'pedi', 'age', 'class']
+dataframe = pd.read_csv(url,names=names)
+array = dataframe.values
+scaler = Binarizer()
+rescale = scaler.fit_transform(array)
+np.set_printoptions(threshold=np.inf)
+print(rescale)
 
 20210111
 adult_dataset有做資料處理
